@@ -3,8 +3,10 @@
   "description": "Highlight public repos on GitHub",
   "version": "0.1",
   "manifest_version": 3,
-  "action": {},
-  "permissions": [],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": ["storage"],
   "background": {
     "service_worker": "background.js"
   },

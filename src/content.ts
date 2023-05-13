@@ -16,11 +16,16 @@ const getStatusLabel = (
   return statusLabel?.[0] as HTMLElement | null;
 };
 
-const doPaint = () => {
+const doPaint = async () => {
+  const { color0: publicColor } = await chrome.storage.local.get('color0');
+  const { color1: privateColor } = await chrome.storage.local.get('color1');
+
   const header = getHeader();
   if (header) {
-    const toPublicColor = () => header.style.backgroundColor = '#2a2';
-    const toPrivateColor = () => header.style.backgroundColor = '#a22';
+    const toPublicColor = () =>
+      header.style.backgroundColor = publicColor ?? '2a2';
+    const toPrivateColor = () =>
+      header.style.backgroundColor = privateColor ?? 'a22';
 
     const label = getStatusLabel(header);
 
@@ -35,5 +40,13 @@ const doPaint = () => {
     }
   }
 };
+
+// chrome.runtime.onMessage.addListener((_message, _sender, sendResponse) => {
+//   if (_message.type === 'change-color') {
+//     doPaint();
+//     sendResponse();
+//     return true;
+//   }
+// });
 
 doPaint();

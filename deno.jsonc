@@ -1,7 +1,7 @@
 {
   "tasks": {
     "hello": "echo hello!",
-    "build": "rm -rf ./dist/ && cp -r ./public ./dist && deno bundle ./src/content.ts ./dist/content.js & deno bundle ./src/background.ts ./dist/background.js"
+    "build": "rm -rf ./dist/ && cp -r ./public ./dist && cp ./src/popup.html ./dist/ && deno bundle ./src/content.ts ./dist/content.js & deno bundle ./src/background.ts ./dist/background.js && deno bundle ./src/popup.ts ./dist/popup.js "
   },
   "fmt": {
     "files": {
