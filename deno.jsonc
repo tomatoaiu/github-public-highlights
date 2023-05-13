@@ -19,7 +19,7 @@
   "compilerOptions" :  {
     "lib": [ "dom" ,  "dom.iterable" ,  "dom.asynciterable" ,  "deno.ns" ],
     "types": [
-      "https://unpkg.com/chrome-types@0.1.153/index.d.ts"
+      "https://unpkg.com/chrome-types@0.1.194/index.d.ts"
     ]
   }
 }

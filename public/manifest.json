@@ -1,6 +1,6 @@
 {
-  "name": "ChromeExtensionTemplateForDeno",
-  "description": "ChromeExtensionTemplateForDeno",
+  "name": "github-public-highlights",
+  "description": "Highlight public repos on GitHub",
   "version": "0.1",
   "manifest_version": 3,
   "action": {},
