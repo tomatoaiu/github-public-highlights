@@ -5,12 +5,10 @@ const PRIVATE_REPOSITORY = 'color1';
 
 document.addEventListener('DOMContentLoaded', () => {
   chrome.storage.local.get([PUBLIC_REPOSITORY], (result) => {
-    console.log(result);
     const input = colorInputs[0] as HTMLInputElement;
     input.value = result[PUBLIC_REPOSITORY];
   });
   chrome.storage.local.get([PRIVATE_REPOSITORY], (result) => {
-    console.log(result);
     const input = colorInputs[1] as HTMLInputElement;
     input.value = result[PRIVATE_REPOSITORY];
   });
