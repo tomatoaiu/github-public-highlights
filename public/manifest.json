@@ -12,8 +12,9 @@
     {
       "js": ["content.js"],
       "matches": [
-        "*://*/*"
-      ]
+        "https://github.com/*/*"
+      ],
+      "run_at": "document_idle"
     }
   ]
 }
