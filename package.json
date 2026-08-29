@@ -1,0 +1,35 @@
+{
+  "name": "github-public-highlights",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "wxt build",
+    "check": "pnpm fmt:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+    "dev": "wxt",
+    "fmt": "oxfmt --write .",
+    "fmt:check": "oxfmt --check .",
+    "lint": "oxlint .",
+    "postinstall": "wxt prepare",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "zip": "wxt zip"
+  },
+  "devDependencies": {
+    "@types/chrome": "0.2.5",
+    "@types/node": "24.13.3",
+    "jsdom": "30.0.1",
+    "oxfmt": "0.63.0",
+    "oxlint": "1.78.0",
+    "typescript": "7.0.2",
+    "vitest": "4.1.10",
+    "wxt": "0.21.3"
+  },
+  "engines": {
+    "node": "24.13.0",
+    "pnpm": "11.20.0"
+  },
+  "packageManager": "pnpm@11.20.0"
+}
