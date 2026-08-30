@@ -25,9 +25,9 @@ describe("paintRepositoryHeaders", () => {
     `
     const header = getElement("#repository-container-header")
 
-    paintRepositoryHeaders(document, "#6fe86e", "#d35829")
+    paintRepositoryHeaders(document, "#46705a", "#8a5942")
 
-    expect(header.style.backgroundColor).toBe("rgb(111, 232, 110)")
+    expect(header.style.backgroundColor).toBe("rgb(70, 112, 90)")
   })
 
   it.each([
@@ -53,9 +53,9 @@ describe("paintRepositoryHeaders", () => {
     const repositoryTabs = getElement("#repository-tabs")
     const titleBand = getElement("#title-band")
 
-    paintRepositoryHeaders(document, "#6fe86e", "#d35829")
+    paintRepositoryHeaders(document, "#46705a", "#8a5942")
 
-    expect(globalRow.style.backgroundColor).toBe("rgb(211, 88, 41)")
+    expect(globalRow.style.backgroundColor).toBe("rgb(138, 89, 66)")
     expect(repositoryTabs.style.backgroundColor).toBe("")
     expect(titleBand.style.backgroundColor).toBe("")
   })

@@ -6,7 +6,7 @@ A Chrome extension that colors GitHub repository headers based on whether the re
 | :--------------------------------------- | :----------------------------------------- |
 | ![public repository image](./public.png) | ![private repository image](./private.png) |
 
-The default colors match these screenshots: public `#6fe86e` and private `#d35829`.
+The dark-theme-friendly defaults are public `#46705a` and private `#8a5942`. Both meet WCAG 2.2 AA against GitHub's dark foreground color.
 
 ## Development
 

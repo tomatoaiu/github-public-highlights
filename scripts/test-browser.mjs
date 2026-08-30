@@ -55,7 +55,7 @@ try {
         : document.querySelector('#repository-container-header')
       if (!(header instanceof HTMLElement)) throw new Error('Repository header not found')
       const color = getComputedStyle(header).backgroundColor
-      if (color !== 'rgb(111, 232, 110)') {
+      if (color !== 'rgb(70, 112, 90)') {
         throw new Error('Original public color was not applied: ' + color)
       }
     })()`,
@@ -140,7 +140,7 @@ try {
       const globalRow = document.getElementById('signed-in-global-row')
       if (!(globalRow instanceof HTMLElement)) throw new Error('Global row not found')
       const color = getComputedStyle(globalRow).backgroundColor
-      if (color !== 'rgb(211, 88, 41)') {
+      if (color !== 'rgb(138, 89, 66)') {
         throw new Error('Global row did not receive the original private color: ' + color)
       }
       for (const id of ['signed-in-repository-tabs', 'signed-in-title-band']) {
