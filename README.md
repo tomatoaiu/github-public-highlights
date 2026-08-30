@@ -6,6 +6,8 @@ A Chrome extension that colors GitHub repository headers based on whether the re
 | :--------------------------------------- | :----------------------------------------- |
 | ![public repository image](./public.png) | ![private repository image](./private.png) |
 
+The default colors match these screenshots: public `#6fe86e` and private `#d35829`.
+
 ## Development
 
 Node.js and pnpm are pinned with [mise](https://mise.jdx.dev/).
