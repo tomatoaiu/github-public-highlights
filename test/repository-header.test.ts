@@ -2,32 +2,15 @@ import { beforeEach, describe, expect, it } from "vitest"
 
 import { paintRepositoryHeaders } from "../src/repository-header"
 
-function setRect(selector: string, width: number, height: number): HTMLElement {
+function getElement(selector: string): HTMLElement {
   const element = document.querySelector<HTMLElement>(selector)
   if (element === null) throw new Error(`Missing fixture element: ${selector}`)
-
-  element.getBoundingClientRect = () =>
-    ({
-      bottom: height,
-      height,
-      left: 0,
-      right: width,
-      top: 0,
-      width,
-      x: 0,
-      y: 0,
-      toJSON() {},
-    }) as DOMRect
   return element
 }
 
 beforeEach(() => {
   document.head.innerHTML = ""
   document.body.innerHTML = ""
-  Object.defineProperty(document.documentElement, "clientWidth", {
-    configurable: true,
-    value: 1000,
-  })
 })
 
 describe("paintRepositoryHeaders", () => {
@@ -40,32 +23,43 @@ describe("paintRepositoryHeaders", () => {
         <nav aria-label="Repository"></nav>
       </div>
     `
-    const header = setRect("#repository-container-header", 1000, 140)
+    const header = getElement("#repository-container-header")
 
     paintRepositoryHeaders(document, "#6fe86e", "#d35829")
 
     expect(header.style.backgroundColor).toBe("rgb(111, 232, 110)")
   })
 
-  it("colors the separate navigation and title bands in the signed-in layout", () => {
+  it.each([
+    "/tomatoaiu/github-public-highlights/issues",
+    "/tomatoaiu/github-public-highlights/pulls",
+  ])("colors the persistent top bar on %s", (path) => {
+    history.replaceState(null, "", path)
     document.head.innerHTML =
       '<meta name="octolytics-dimension-repository_public" content="false">'
     document.body.innerHTML = `
-      <div id="navigation-band">
-        <nav aria-label="Repository"></nav>
-      </div>
+      <header class="AppHeader">
+        <div id="global-bar" class="AppHeader-globalBar">
+          <nav aria-label="GitHub Breadcrumb"></nav>
+        </div>
+        <div id="repository-tabs">
+          <nav aria-label="Repository"></nav>
+        </div>
+      </header>
       <div id="title-band">
-        <div><span class="prc-Label">Private</span></div>
+        <span class="prc-Label">Private</span>
       </div>
     `
-    const navigation = setRect("nav", 900, 48)
-    const navigationBand = setRect("#navigation-band", 1000, 70)
-    const titleBand = setRect("#title-band", 1000, 100)
+    const globalBar = getElement("#global-bar")
+    const repositoryNavigation = getElement('nav[aria-label="Repository"]')
+    const repositoryTabs = getElement("#repository-tabs")
+    const titleBand = getElement("#title-band")
 
     paintRepositoryHeaders(document, "#6fe86e", "#d35829")
 
-    expect(navigation.style.backgroundColor).toBe("")
-    expect(navigationBand.style.backgroundColor).toBe("rgb(211, 88, 41)")
-    expect(titleBand.style.backgroundColor).toBe("rgb(211, 88, 41)")
+    expect(globalBar.style.backgroundColor).toBe("rgb(211, 88, 41)")
+    expect(repositoryNavigation.style.backgroundColor).toBe("")
+    expect(repositoryTabs.style.backgroundColor).toBe("")
+    expect(titleBand.style.backgroundColor).toBe("")
   })
 })
