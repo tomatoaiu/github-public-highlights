@@ -22,6 +22,13 @@ Build the production extension and load `.output/chrome-mv3` from `chrome://exte
 pnpm build
 ```
 
+Run the extension against GitHub with headless `agent-browser`:
+
+```sh
+pnpm browser:install # Only when Chrome for Testing is not installed
+pnpm test:browser
+```
+
 Run all required checks or create a distribution ZIP:
 
 ```sh

@@ -5,6 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
+    "browser:install": "agent-browser install",
     "build": "wxt build",
     "check": "pnpm fmt:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "dev": "wxt",
@@ -13,6 +14,7 @@
     "lint": "oxlint .",
     "postinstall": "wxt prepare",
     "test": "vitest run",
+    "test:browser": "pnpm build && node scripts/test-browser.mjs",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "zip": "wxt zip"
@@ -20,6 +22,7 @@
   "devDependencies": {
     "@types/chrome": "0.2.5",
     "@types/node": "24.13.3",
+    "agent-browser": "0.34.0",
     "jsdom": "30.0.1",
     "oxfmt": "0.63.0",
     "oxlint": "1.78.0",
