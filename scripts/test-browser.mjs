@@ -47,7 +47,12 @@ try {
   run([
     "eval",
     `(() => {
-      const header = document.querySelector('#repository-container-header')
+      const currentHeader = document.querySelector(
+        'header[aria-label="Global navigation menu"]',
+      )?.firstElementChild
+      const header = currentHeader instanceof HTMLElement
+        ? currentHeader
+        : document.querySelector('#repository-container-header')
       if (!(header instanceof HTMLElement)) throw new Error('Repository header not found')
       const color = getComputedStyle(header).backgroundColor
       if (color !== 'rgb(111, 232, 110)') {
@@ -71,7 +76,12 @@ try {
   run([
     "eval",
     `(() => {
-      const header = document.querySelector('#repository-container-header')
+      const currentHeader = document.querySelector(
+        'header[aria-label="Global navigation menu"]',
+      )?.firstElementChild
+      const header = currentHeader instanceof HTMLElement
+        ? currentHeader
+        : document.querySelector('#repository-container-header')
       if (!(header instanceof HTMLElement)) throw new Error('Repository header not found')
       const color = getComputedStyle(header).backgroundColor
       if (color !== 'rgb(0, 255, 0)') {
@@ -88,8 +98,12 @@ try {
     run([
       "eval",
       `(() => {
-        const header = document.querySelector('.AppHeader-globalBar') ??
-          document.querySelector('#repository-container-header')
+        const currentHeader = document.querySelector(
+          'header[aria-label="Global navigation menu"]',
+        )?.firstElementChild
+        const header = currentHeader instanceof HTMLElement
+          ? currentHeader
+          : document.querySelector('#repository-container-header')
         if (!(header instanceof HTMLElement)) throw new Error('${route} header not found')
         const color = getComputedStyle(header).backgroundColor
         if (color !== 'rgb(0, 255, 0)') {
@@ -109,13 +123,11 @@ try {
       }
       repositoryPublic.content = 'false'
       document.body.innerHTML = \`
-        <header class="AppHeader">
-          <div id="signed-in-global-bar" class="AppHeader-globalBar">
-            <nav aria-label="GitHub Breadcrumb"></nav>
+        <header aria-label="Global navigation menu" role="banner">
+          <div id="signed-in-global-row">
+            <nav aria-label="Breadcrumbs"></nav>
           </div>
-          <div id="signed-in-repository-tabs">
-            <nav aria-label="Repository"></nav>
-          </div>
+          <nav id="signed-in-repository-tabs" aria-label="Repository"></nav>
         </header>
         <div id="signed-in-title-band"><span class="prc-Label">Private</span></div>
       \`
@@ -125,11 +137,11 @@ try {
   run([
     "eval",
     `(() => {
-      const globalBar = document.getElementById('signed-in-global-bar')
-      if (!(globalBar instanceof HTMLElement)) throw new Error('Global bar not found')
-      const color = getComputedStyle(globalBar).backgroundColor
+      const globalRow = document.getElementById('signed-in-global-row')
+      if (!(globalRow instanceof HTMLElement)) throw new Error('Global row not found')
+      const color = getComputedStyle(globalRow).backgroundColor
       if (color !== 'rgb(211, 88, 41)') {
-        throw new Error('Global bar did not receive the original private color: ' + color)
+        throw new Error('Global row did not receive the original private color: ' + color)
       }
       for (const id of ['signed-in-repository-tabs', 'signed-in-title-band']) {
         const element = document.getElementById(id)
@@ -155,9 +167,9 @@ try {
   run([
     "eval",
     `(() => {
-      const globalBar = document.querySelector('.AppHeader-globalBar')
-      if (!(globalBar instanceof HTMLElement)) throw new Error('Global bar not found')
-      const color = getComputedStyle(globalBar).backgroundColor
+      const globalRow = document.getElementById('signed-in-global-row')
+      if (!(globalRow instanceof HTMLElement)) throw new Error('Global row not found')
+      const color = getComputedStyle(globalRow).backgroundColor
       if (color !== 'rgb(255, 102, 0)') {
         throw new Error('Private color was not applied: ' + color)
       }
@@ -168,10 +180,11 @@ try {
       "eval",
       `(() => {
         document.body.innerHTML = \`
-          <header class="AppHeader">
-            <div id="${route}-global-bar" class="AppHeader-globalBar">
-              <nav aria-label="GitHub Breadcrumb"></nav>
+          <header aria-label="Global navigation menu" role="banner">
+            <div id="${route}-global-row">
+              <nav aria-label="Breadcrumbs"></nav>
             </div>
+            <nav aria-label="Repository"></nav>
           </header>
         \`
         history.pushState(null, '', '/tomatoaiu/github-public-highlights/${route}')
@@ -181,11 +194,11 @@ try {
     run([
       "eval",
       `(() => {
-        const globalBar = document.getElementById('${route}-global-bar')
-        if (!(globalBar instanceof HTMLElement)) throw new Error('${route} global bar not found')
-        const color = getComputedStyle(globalBar).backgroundColor
+        const globalRow = document.getElementById('${route}-global-row')
+        if (!(globalRow instanceof HTMLElement)) throw new Error('${route} global row not found')
+        const color = getComputedStyle(globalRow).backgroundColor
         if (color !== 'rgb(255, 102, 0)') {
-          throw new Error('${route} global bar was not highlighted: ' + color)
+          throw new Error('${route} global row was not highlighted: ' + color)
         }
       })()`,
     ])
