@@ -1,5 +1,5 @@
-export const DEFAULT_PUBLIC_REPOSITORY_COLOR = "#6fe86e"
-export const DEFAULT_PRIVATE_REPOSITORY_COLOR = "#d35829"
+export const DEFAULT_PUBLIC_REPOSITORY_COLOR = "#46705a"
+export const DEFAULT_PRIVATE_REPOSITORY_COLOR = "#8a5942"
 
 export function getRepositoryColors(
   storedPublicColor: unknown,
@@ -7,11 +7,15 @@ export function getRepositoryColors(
 ): { publicColor: string; privateColor: string } {
   return {
     publicColor:
-      typeof storedPublicColor === "string" && storedPublicColor !== "#aaaaaa"
+      typeof storedPublicColor === "string" &&
+      storedPublicColor !== "#aaaaaa" &&
+      storedPublicColor !== "#6fe86e"
         ? storedPublicColor
         : DEFAULT_PUBLIC_REPOSITORY_COLOR,
     privateColor:
-      typeof storedPrivateColor === "string" && storedPrivateColor !== "#aa22aa"
+      typeof storedPrivateColor === "string" &&
+      storedPrivateColor !== "#aa22aa" &&
+      storedPrivateColor !== "#d35829"
         ? storedPrivateColor
         : DEFAULT_PRIVATE_REPOSITORY_COLOR,
   }
