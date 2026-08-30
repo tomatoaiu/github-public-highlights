@@ -1,33 +1,29 @@
+import { getRepositoryColors } from "./repository-color"
+
 const colorInputs = document.querySelectorAll('input[type="color"]')
 
 const PUBLIC_REPOSITORY = "color0"
 const PRIVATE_REPOSITORY = "color1"
 
 document.addEventListener("DOMContentLoaded", () => {
-  chrome.storage.local.get([PUBLIC_REPOSITORY], (result) => {
-    const input = colorInputs[0] as HTMLInputElement
-    const color = result[PUBLIC_REPOSITORY]
-    if (typeof color === "string") input.value = color
-  })
-  chrome.storage.local.get([PRIVATE_REPOSITORY], (result) => {
-    const input = colorInputs[1] as HTMLInputElement
-    const color = result[PRIVATE_REPOSITORY]
-    if (typeof color === "string") input.value = color
-  })
+  chrome.storage.local.get(
+    [PUBLIC_REPOSITORY, PRIVATE_REPOSITORY],
+    (storedColors) => {
+      const { publicColor, privateColor } = getRepositoryColors(
+        storedColors[PUBLIC_REPOSITORY],
+        storedColors[PRIVATE_REPOSITORY],
+      )
+      const publicInput = colorInputs[0] as HTMLInputElement
+      const privateInput = colorInputs[1] as HTMLInputElement
+      publicInput.value = publicColor
+      privateInput.value = privateColor
+    },
+  )
 
   colorInputs.forEach((input, index) => {
-    input.addEventListener("change", (e: Event) => {
-      const target = e.target as HTMLInputElement
-      const color = target.value
+    input.addEventListener("change", (event) => {
+      const color = (event.target as HTMLInputElement).value
       void chrome.storage.local.set({ [`color${index}`]: color })
-
-      // const tabs = await chrome.tabs.query({
-      //   active: true,
-      //   currentWindow: true,
-      // });
-      // await chrome.tabs.sendMessage(tabs[0]?.id || 0, {
-      //   message: { type: 'change-color' },
-      // });
     })
   })
 })

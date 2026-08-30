@@ -44,6 +44,17 @@ try {
     }`,
   ])
   run(["wait", "#repository-container-header"])
+  run([
+    "eval",
+    `(() => {
+      const header = document.querySelector('#repository-container-header')
+      if (!(header instanceof HTMLElement)) throw new Error('Repository header not found')
+      const color = getComputedStyle(header).backgroundColor
+      if (color !== 'rgb(111, 232, 110)') {
+        throw new Error('Original public color was not applied: ' + color)
+      }
+    })()`,
+  ])
   run(["tab", "new"])
   run(["open", `chrome-extension://${extensionId}/popup.html`])
   run([
@@ -66,7 +77,66 @@ try {
       if (color !== 'rgb(0, 255, 0)') {
         throw new Error('Public color was not applied: ' + color)
       }
-      return color
+    })()`,
+  ])
+  run([
+    "eval",
+    `(() => {
+      const repositoryPublic = document.querySelector(
+        'meta[name="octolytics-dimension-repository_public"]',
+      )
+      if (!(repositoryPublic instanceof HTMLMetaElement)) {
+        throw new Error('Repository visibility metadata not found')
+      }
+      repositoryPublic.content = 'false'
+      document.body.style.minHeight = '1000px'
+      document.body.innerHTML = \`
+        <div id="signed-in-navigation-band" style="width: 100vw; height: 70px">
+          <nav aria-label="Repository" style="display: block; width: 90vw; height: 48px"></nav>
+        </div>
+        <div id="signed-in-title-band" style="width: 100vw; height: 100px">
+          <div><span class="prc-Label">Private</span></div>
+        </div>
+      \`
+    })()`,
+  ])
+  run(["wait", "300"])
+  run([
+    "eval",
+    `(() => {
+      for (const id of ['signed-in-navigation-band', 'signed-in-title-band']) {
+        const band = document.getElementById(id)
+        if (!(band instanceof HTMLElement)) throw new Error(id + ' not found')
+        const color = getComputedStyle(band).backgroundColor
+        if (color !== 'rgb(211, 88, 41)') {
+          throw new Error(id + ' did not receive the original private color: ' + color)
+        }
+      }
+    })()`,
+  ])
+  run(["tab", "t2"])
+  run([
+    "eval",
+    `(() => {
+      const input = document.querySelectorAll('input[type="color"]')[1]
+      if (!(input instanceof HTMLInputElement)) throw new Error('Private color input not found')
+      input.value = '#ff6600'
+      input.dispatchEvent(new Event('change', { bubbles: true }))
+    })()`,
+  ])
+  run(["tab", "t1"])
+  run(["wait", "300"])
+  run([
+    "eval",
+    `(() => {
+      for (const id of ['signed-in-navigation-band', 'signed-in-title-band']) {
+        const band = document.getElementById(id)
+        if (!(band instanceof HTMLElement)) throw new Error(id + ' not found')
+        const color = getComputedStyle(band).backgroundColor
+        if (color !== 'rgb(255, 102, 0)') {
+          throw new Error(id + ' was not highlighted: ' + color)
+        }
+      }
     })()`,
   ])
   console.log("Browser test passed")

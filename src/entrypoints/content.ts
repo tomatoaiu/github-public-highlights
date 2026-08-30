@@ -1,56 +1,59 @@
 import { defineContentScript } from "#imports"
 
-import { getRepositoryColor } from "../repository-color"
+import { paintRepositoryHeaders } from "../repository-header"
+import { getRepositoryColors } from "../repository-color"
 
 const PUBLIC_REPOSITORY = "color0"
 const PRIVATE_REPOSITORY = "color1"
 
-function getHeader(): HTMLElement | null {
-  return document.querySelector<HTMLElement>("#repository-container-header")
-}
-
-function getStatusLabel(header: HTMLElement): HTMLElement | null {
-  return (
-    header.querySelector<HTMLElement>(
-      ".Label.Label--secondary.v-align-middle.mr-1",
-    ) ?? null
-  )
-}
-
 async function paintRepositoryHeader(): Promise<void> {
-  const colors = await chrome.storage.local.get([
+  const storedColors = await chrome.storage.local.get([
     PUBLIC_REPOSITORY,
     PRIVATE_REPOSITORY,
   ])
-  const storedPublicColor = colors[PUBLIC_REPOSITORY]
-  const storedPrivateColor = colors[PRIVATE_REPOSITORY]
-  const publicColor =
-    typeof storedPublicColor === "string" ? storedPublicColor : "#22aa22"
-  const privateColor =
-    typeof storedPrivateColor === "string" ? storedPrivateColor : "#aa2222"
-
-  const header = getHeader()
-  if (header === null) {
-    return
-  }
-
-  const visibility = getStatusLabel(header)?.innerText ?? header.innerText
-  const color = getRepositoryColor(visibility, publicColor, privateColor)
-  if (color !== null) header.style.backgroundColor = color
+  const { publicColor, privateColor } = getRepositoryColors(
+    storedColors[PUBLIC_REPOSITORY],
+    storedColors[PRIVATE_REPOSITORY],
+  )
+  paintRepositoryHeaders(document, publicColor, privateColor)
 }
 
 export default defineContentScript({
   matches: ["https://github.com/*/*"],
   runAt: "document_idle",
-  main() {
-    void paintRepositoryHeader()
-    chrome.storage.onChanged.addListener((changes, areaName) => {
+  main(ctx) {
+    let paintQueued = false
+    const schedulePaint = () => {
+      if (paintQueued) return
+      paintQueued = true
+      ctx.requestAnimationFrame(() => {
+        paintQueued = false
+        void paintRepositoryHeader()
+      })
+    }
+    const handleStorageChange = (
+      changes: Record<string, chrome.storage.StorageChange>,
+      areaName: string,
+    ) => {
       if (
         areaName === "local" &&
         (PUBLIC_REPOSITORY in changes || PRIVATE_REPOSITORY in changes)
       ) {
-        void paintRepositoryHeader()
+        schedulePaint()
       }
+    }
+    const observer = new MutationObserver(schedulePaint)
+
+    observer.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
     })
+    chrome.storage.onChanged.addListener(handleStorageChange)
+    ctx.addEventListener(window, "wxt:locationchange", schedulePaint)
+    ctx.onInvalidated(() => {
+      observer.disconnect()
+      chrome.storage.onChanged.removeListener(handleStorageChange)
+    })
+    schedulePaint()
   },
 })
