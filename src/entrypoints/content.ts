@@ -44,5 +44,13 @@ export default defineContentScript({
   runAt: "document_idle",
   main() {
     void paintRepositoryHeader()
+    chrome.storage.onChanged.addListener((changes, areaName) => {
+      if (
+        areaName === "local" &&
+        (PUBLIC_REPOSITORY in changes || PRIVATE_REPOSITORY in changes)
+      ) {
+        void paintRepositoryHeader()
+      }
+    })
   },
 })

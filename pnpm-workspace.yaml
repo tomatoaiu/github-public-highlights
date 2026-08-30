@@ -9,3 +9,5 @@ minimumReleaseAgeStrict: true
 
 trustLockfile: false
 blockExoticSubdeps: true
+allowBuilds:
+  agent-browser: false
