@@ -31,6 +31,7 @@ describe("paintRepositoryHeaders", () => {
   })
 
   it.each([
+    "/tomatoaiu/github-public-highlights",
     "/tomatoaiu/github-public-highlights/issues",
     "/tomatoaiu/github-public-highlights/pulls",
   ])("colors the persistent top bar on %s", (path) => {
@@ -38,27 +39,23 @@ describe("paintRepositoryHeaders", () => {
     document.head.innerHTML =
       '<meta name="octolytics-dimension-repository_public" content="false">'
     document.body.innerHTML = `
-      <header class="AppHeader">
-        <div id="global-bar" class="AppHeader-globalBar">
-          <nav aria-label="GitHub Breadcrumb"></nav>
+      <header aria-label="Global navigation menu" role="banner">
+        <div id="global-row" class="prc-Stack-Stack-UQ9k6">
+          <nav aria-label="Breadcrumbs"></nav>
         </div>
-        <div id="repository-tabs">
-          <nav aria-label="Repository"></nav>
-        </div>
+        <nav id="repository-tabs" aria-label="Repository"></nav>
       </header>
       <div id="title-band">
         <span class="prc-Label">Private</span>
       </div>
     `
-    const globalBar = getElement("#global-bar")
-    const repositoryNavigation = getElement('nav[aria-label="Repository"]')
+    const globalRow = getElement("#global-row")
     const repositoryTabs = getElement("#repository-tabs")
     const titleBand = getElement("#title-band")
 
     paintRepositoryHeaders(document, "#6fe86e", "#d35829")
 
-    expect(globalBar.style.backgroundColor).toBe("rgb(211, 88, 41)")
-    expect(repositoryNavigation.style.backgroundColor).toBe("")
+    expect(globalRow.style.backgroundColor).toBe("rgb(211, 88, 41)")
     expect(repositoryTabs.style.backgroundColor).toBe("")
     expect(titleBand.style.backgroundColor).toBe("")
   })
